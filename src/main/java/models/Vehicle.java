@@ -29,6 +29,38 @@ public class Vehicle implements Validatable {
         this(id, name, coordinates, LocalDate.now(), enginePower, capacity, type, fuelType);
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
+    public String getCreationDate() {
+        return creationDate.toString();
+    }
+
+    public int getEnginePower() {
+        return enginePower;
+    }
+
+    public Integer getCapacity() {
+        return capacity;
+    }
+
+    public VehicleType getType() {
+        return type;
+    }
+
+    public FuelType getFuelType() {
+        return fuelType;
+    }
+
     public boolean check_validity() {
         if (id == null || id <= 0) return false;
         if (name == null || name.isEmpty()) return false;

@@ -11,6 +11,14 @@ public class Coordinates implements Validatable {
         this.y = y;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
     public boolean check_validity() {
         return x <= 636;
     }
