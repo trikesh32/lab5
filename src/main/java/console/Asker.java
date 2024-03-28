@@ -9,8 +9,7 @@ import utils.Console;
 import java.util.NoSuchElementException;
 
 public class Asker {
-    public static class AskBreak extends Exception {
-    }
+    public static class AskBreak extends Exception {}
 
     public static Vehicle askVehicle(Console console, int id) throws AskBreak {
         String name = askString("name", console);

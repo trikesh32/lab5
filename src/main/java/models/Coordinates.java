@@ -19,6 +19,14 @@ public class Coordinates implements Validatable {
         return y;
     }
 
+    @Override
+    public String toString() {
+        return "Coordinates{" +
+                "x: " + x +
+                ", y: " + y +
+                '}';
+    }
+
     public boolean check_validity() {
         return x <= 636;
     }

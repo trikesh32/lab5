@@ -1,79 +1,95 @@
 package managers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.security.NoTypePermission;
+import com.thoughtworks.xstream.security.NullPermission;
+import com.thoughtworks.xstream.security.PrimitiveTypePermission;
 import models.Coordinates;
-import models.FuelType;
 import models.Vehicle;
-import models.VehicleType;
 import utils.Console;
 
-import java.beans.XMLEncoder;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.io.*;
 import java.util.*;
 
 public class DumpManager {
     private final String filename;
     private final Console console;
+    private final XStream xstream;
 
     public DumpManager(String filename, Console console) {
         this.filename = filename;
         this.console = console;
+        xstream = new XStream();
+        xstream.alias("vehicle", Vehicle.class);
+        xstream.alias("coordinates", Coordinates.class);
+        xstream.alias("vehicles", CollectionManager.class);
+        xstream.setMode(XStream.NO_REFERENCES);
+        xstream.addPermission(NullPermission.NULL);
+        xstream.addPermission(NoTypePermission.NONE);
+        xstream.addPermission(PrimitiveTypePermission.PRIMITIVES);
+        xstream.allowTypeHierarchy(List.class);
+        xstream.allowTypeHierarchy(String.class);
+        xstream.ignoreUnknownElements();
     }
 
-    public String java2xml(Stack<Vehicle> obj) {
-        try {
-            XmlMapper xmlMapper = new XmlMapper();
-            return xmlMapper.writeValueAsString(obj);
-        } catch (Exception e) {
-            console.printError("Ошибка сереализации");
-            return null;
-        }
-    }
-
-    public HashMap<String, ArrayList<LinkedHashMap<String, Object>>> xml2map(String s) throws JsonProcessingException {
-        XmlMapper xmlMapper = new XmlMapper();
-        return xmlMapper.readValue(s, HashMap.class);
-    }
-
-    public Stack<Vehicle> xml2collection(String s) {
-        try {
-            HashMap<String, ArrayList<LinkedHashMap<String, Object>>> map = xml2map(s);
-            ArrayList<LinkedHashMap<String, Object>> temp = map.get("item");
-            Stack<Vehicle> collection = new Stack<>();
-            for (var data : temp) {
-                Integer id = Integer.parseInt((String) data.get("id"));
-                String name = (String) data.get("name");
-                LinkedHashMap<String, Object> coordinates = (LinkedHashMap<String, Object>) data.get("coordinates");
-                Integer x = Integer.parseInt((String) coordinates.get("x"));
-                Float y = Float.parseFloat((String) coordinates.get("y"));
-                LocalDate creationDate = LocalDate.parse((String) data.get("creationDate"));
-                Integer enginePower = (Integer) data.get("enginePower");
-                Integer capacity = (Integer) data.get("capacity");
-                VehicleType type = VehicleType.valueOf(((String) data.get("type")).toUpperCase());
-                FuelType fuelType = FuelType.valueOf(((String) data.get("fuelType")).toUpperCase());
-                Vehicle vehicle = new Vehicle(id, name, new Coordinates(x, y), creationDate, enginePower, capacity, type, fuelType);
-                if (vehicle.check_validity()) {
-                    collection.push(vehicle);
+    public void writeCollection(Stack<Vehicle> collection) {
+        if (!filename.isEmpty()) {
+            try (FileOutputStream collectionFileWriter = new FileOutputStream(filename)) {
+                if (!collection.isEmpty()){
+                String xml = xstream.toXML(new ArrayList<>(collection));
+                collectionFileWriter.write(xml.getBytes());
                 } else {
-                    console.printError("Объект имеет некорректные");
+                    collectionFileWriter.write("".getBytes());
                 }
+            } catch (IOException exception) {
+                console.printError("Файл не может быть открыт");
             }
-            return collection;
-        } catch (Exception e) {
-            console.printError("Ошибка десереализации");
-            console.println(e);
-            return null;
-        }
+        } else console.printError("Беда с названием файла");
     }
 
-    public <T> void saveDump(T collection) throws IOException {
-        XmlMapper xmlMapper = new XmlMapper();
-        xmlMapper.writeValue(new File(filename), collection);
+    public Stack<Vehicle> readCollection() {
+        if (!filename.isEmpty()) {
+            try (FileReader fileReader = new FileReader(filename)) {
+                xstream.allowTypes(new Class[]{List.class, Vehicle.class});
+                BufferedReader reader = new BufferedReader(fileReader);
+                if (new File(filename).length() == 0) {
+                    return new Stack<>();
+                }
+                StringBuilder xml = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    line = line.trim();
+                    if (!line.isEmpty()) {
+                        xml.append(line);
+                    }
+                }
+                List<Vehicle> list = (List<Vehicle>) xstream.fromXML(xml.toString());
+                Stack<Vehicle> vehicleStack = new Stack<>();
+                for (var v : list) {
+                    if (v.check_validity()) {
+                        vehicleStack.push(v);
+                    } else {
+                        console.printError("Файл содержит некорректный объект");
+                    }
+                }
+                return vehicleStack;
+            } catch (FileNotFoundException e) {
+                console.printError("Файл не найден");
+                return new Stack<>();
+            } catch (IOException e) {
+                console.printError("Ошибка ввода-вывода");
+            } catch (NullPointerException e) {
+                console.printError("Невозможно найти коллекцию в файле");
+            } catch (IllegalStateException e) {
+                console.printError("Непредвиденная ошибка");
+            } catch (NoSuchElementException e) {
+                console.printError("Файл пустой");
+            } catch (Exception e) {
+                console.printError("Ошибка десериализации");
+            }
+        } else
+            console.printError("Беда с названием файла");
+        return null;
     }
+
 }

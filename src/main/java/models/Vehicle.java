@@ -4,8 +4,9 @@ import utils.Validatable;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-public class Vehicle implements Validatable {
+public class Vehicle implements Validatable, Comparable<Vehicle>{
     private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -41,8 +42,8 @@ public class Vehicle implements Validatable {
         return coordinates;
     }
 
-    public String getCreationDate() {
-        return creationDate.toString();
+    public LocalDate getCreationDate() {
+        return creationDate;
     }
 
     public int getEnginePower() {
@@ -53,7 +54,7 @@ public class Vehicle implements Validatable {
         return capacity;
     }
 
-    public VehicleType getType() {
+    public VehicleType getVehicleType() {
         return type;
     }
 
@@ -74,16 +75,32 @@ public class Vehicle implements Validatable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vehicle vehicle = (Vehicle) o;
+        return enginePower == vehicle.enginePower && Objects.equals(id, vehicle.id) && Objects.equals(name, vehicle.name) && Objects.equals(coordinates, vehicle.coordinates) && Objects.equals(creationDate, vehicle.creationDate) && Objects.equals(capacity, vehicle.capacity) && type == vehicle.type && fuelType == vehicle.fuelType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, coordinates, creationDate, enginePower, capacity, type, fuelType);
+    }
+
+    @Override
     public String toString() {
         return "Vehicle{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", coordinates=" + coordinates +
-                ", creationDate=" + creationDate +
-                ", enginePower=" + enginePower +
-                ", capacity=" + capacity +
-                ", type=" + type +
-                ", fuelType=" + fuelType +
+                "id: " + id +
+                ", name: '" + name +
+                "', coordinates: " + coordinates +
+                ", creationDate: " + creationDate +
+                ", enginePower: " + enginePower +
+                ", capacity: " + capacity +
+                ", type: " + type +
+                ", fuelType: " + fuelType +
                 '}';
+    }
+    public int compareTo(Vehicle o){
+        return this.getName().compareTo(o.getName());
     }
 }
