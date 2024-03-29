@@ -4,6 +4,10 @@ import utils.Executable;
 
 import java.util.Objects;
 
+/**
+ * Абстрактный класс команды
+ * @author trikesh
+ */
 public abstract class Command implements Describable, Executable {
     private final String name;
     private final String description;

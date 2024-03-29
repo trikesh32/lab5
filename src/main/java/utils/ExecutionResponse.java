@@ -1,5 +1,9 @@
 package utils;
 
+/**
+ * Класс ответа выполнения
+ * @author trikesh
+ */
 public class ExecutionResponse {
     private boolean exitCode;
     private String message;

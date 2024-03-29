@@ -11,6 +11,10 @@ import utils.Console;
 import java.io.*;
 import java.util.*;
 
+/**
+ * Менеджер для загрузки из файла в формате xml, и сохранения
+ * @author trikesh
+ */
 public class DumpManager {
     private final String filename;
     private final Console console;
@@ -32,6 +36,10 @@ public class DumpManager {
         xstream.ignoreUnknownElements();
     }
 
+    /**
+     * Записывает коллекцию в файл
+     * @param collection коллекция
+     */
     public void writeCollection(Stack<Vehicle> collection) {
         if (!filename.isEmpty()) {
             try (FileOutputStream collectionFileWriter = new FileOutputStream(filename)) {
@@ -47,6 +55,10 @@ public class DumpManager {
         } else console.printError("Беда с названием файла");
     }
 
+    /**
+     * Считывает коллекцию из файла
+     * @return коллекцию
+     */
     public Stack<Vehicle> readCollection() {
         if (!filename.isEmpty()) {
             try (FileReader fileReader = new FileReader(filename)) {

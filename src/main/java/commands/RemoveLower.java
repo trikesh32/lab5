@@ -8,6 +8,10 @@ import utils.ExecutionResponse;
 
 import java.util.Stack;
 
+/**
+ * Удаляет элементы меньше заданного.
+ * @author trikesh
+ */
 public class RemoveLower extends Command{
     private final Console console;
     private final CollectionManager collectionManager;
@@ -17,13 +21,18 @@ public class RemoveLower extends Command{
         this.collectionManager = collectionManager;
     }
 
+    /**
+     * Выполняет команду
+     * @return Успешность выполнения команды.
+     */
     @Override
     public ExecutionResponse apply(String[] args) {
         try {
             if (!args[1].isEmpty()) return new ExecutionResponse(false, "Команда используется не верно!");
+            console.println("Выполняется remove_lower...");
             console.println("Задаем критерий Vehicle");
             Vehicle o = Asker.askVehicle(console, collectionManager.getNewId());
-            if (o.check_validity()){
+            if (o != null && o.check_validity()){
                 Stack<Vehicle> tmp = (Stack<Vehicle>) collectionManager.getCollection().clone();
                 for (var e : tmp){
                     if (e.compareTo(o) < 0){

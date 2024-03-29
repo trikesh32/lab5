@@ -6,6 +6,10 @@ import utils.ExecutionResponse;
 
 import java.time.LocalDateTime;
 
+/**
+ * Выводит информацию о коллекции.
+ * @author trikesh
+ */
 public class Info extends Command{
     private Console console;
     private CollectionManager collectionManager;
@@ -15,6 +19,10 @@ public class Info extends Command{
         this.collectionManager = collectionManager;
     }
 
+    /**
+     * Выполняет команду
+     * @return Успешность выполнения команды.
+     */
     @Override
     public ExecutionResponse apply(String[] args) {
         if(!args[1].isEmpty()) return new ExecutionResponse(false, "Команда используется не верно!");

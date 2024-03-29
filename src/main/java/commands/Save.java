@@ -5,6 +5,10 @@ import managers.DumpManager;
 import utils.Console;
 import utils.ExecutionResponse;
 
+/**
+ * Сохраняет коллекцию.
+ * @author trikesh
+ */
 public class Save extends Command{
     private Console console;
     private CollectionManager collectionManager;
@@ -16,6 +20,10 @@ public class Save extends Command{
         this.dumpManager = dumpManager;
     }
 
+    /**
+     * Выполняет команду
+     * @return Успешность выполнения команды.
+     */
     @Override
     public ExecutionResponse apply(String[] args) {
         if(!args[1].isEmpty()) return new ExecutionResponse(false, "Команда используется не верно!");

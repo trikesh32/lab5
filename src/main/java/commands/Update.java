@@ -6,6 +6,10 @@ import utils.Console;
 import utils.ExecutionResponse;
 
 
+/**
+ * Обновляет элемент коллекции.
+ * @author trikesh
+ */
 public class Update extends Command {
     private Console console;
     private CollectionManager collectionManager;
@@ -16,6 +20,10 @@ public class Update extends Command {
         this.collectionManager = collectionManager;
     }
 
+    /**
+     * Выполняет команду
+     * @return Успешность выполнения команды.
+     */
     @Override
     public ExecutionResponse apply(String[] args) {
         try {
@@ -32,7 +40,7 @@ public class Update extends Command {
             }
             console.println("Cоздаем новый Vehicle");
             var new_vehicle = Asker.askVehicle(console, id);
-            if (new_vehicle.check_validity()){
+            if (new_vehicle != null && new_vehicle.check_validity()){
                 collectionManager.remove(id);
                 collectionManager.add(new_vehicle);
                 return new ExecutionResponse("Vehicle успешно обновлен!");

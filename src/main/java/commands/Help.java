@@ -8,6 +8,10 @@ import utils.ExecutionResponse;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * Выводит информацию о командах.
+ * @author trikesh
+ */
 public class Help extends Command{
     private CommandManager commandManager;
     public Help(CommandManager commandManager){
@@ -15,6 +19,10 @@ public class Help extends Command{
         this.commandManager = commandManager;
     }
 
+    /**
+     * Выполняет команду
+     * @return Успешность выполнения команды.
+     */
     @Override
     public ExecutionResponse apply(String[] args) {
         if(!args[1].isEmpty()) return new ExecutionResponse(false, "Команда используется не верно!");

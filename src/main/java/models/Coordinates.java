@@ -2,6 +2,10 @@ package models;
 
 import utils.Validatable;
 
+/**
+ * Класс координат
+ * @author trikesh
+ */
 public class Coordinates implements Validatable {
     private int x; //Максимальное значение поля: 636
     private float y;
@@ -27,6 +31,10 @@ public class Coordinates implements Validatable {
                 '}';
     }
 
+    /**
+     * Проверяет валидность полей
+     * @return true если валидны, иначе false
+     */
     public boolean check_validity() {
         return x <= 636;
     }

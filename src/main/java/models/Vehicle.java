@@ -3,9 +3,13 @@ package models;
 import utils.Validatable;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
+
+/**
+ * Класс Vehicle
+ * @author trikesh
+ */
 public class Vehicle implements Validatable, Comparable<Vehicle>{
     private Integer id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
@@ -29,6 +33,7 @@ public class Vehicle implements Validatable, Comparable<Vehicle>{
     public Vehicle(Integer id, String name, Coordinates coordinates, Integer enginePower, Integer capacity, VehicleType type, FuelType fuelType){
         this(id, name, coordinates, LocalDate.now(), enginePower, capacity, type, fuelType);
     }
+
 
     public Integer getId() {
         return id;
@@ -62,6 +67,10 @@ public class Vehicle implements Validatable, Comparable<Vehicle>{
         return fuelType;
     }
 
+    /**
+     * Проверяет поля экземпляра на валидность
+     * @return true если валидны, иначе false
+     */
     public boolean check_validity() {
         if (id == null || id <= 0) return false;
         if (name == null || name.isEmpty()) return false;
@@ -70,7 +79,6 @@ public class Vehicle implements Validatable, Comparable<Vehicle>{
         if (enginePower <= 0) return false;
         if (capacity == null || capacity <= 0) return false;
         if (type == null) return false;
-        if (fuelType == null) return false;
         return true;
     }
 

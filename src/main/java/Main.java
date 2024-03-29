@@ -10,7 +10,7 @@ import utils.Runner;
 
 public class Main {
     public static void main(String[] args) {
-        String filename = "huy.xml";
+        String filename = "db.xml";
         Console console = new StandardConsole();
         console.selectConsoleScanner();
         DumpManager dumpManager = new DumpManager(filename, console);
@@ -35,6 +35,7 @@ public class Main {
         commandManager.register("sum_of_capacity", new SumOfCapacity(console, collectionManager));
         commandManager.register("filter_by_capacity", new FilterByCapacity(console, collectionManager));
         commandManager.register("filter_less_than_type", new FilterLessThanType(console, collectionManager));
+        commandManager.register("execute_script", new ExecuteScript(console));
         Runner runner = new Runner(console, commandManager);
         runner.interactiveMode();
     }

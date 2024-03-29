@@ -6,6 +6,10 @@ import models.VehicleType;
 import utils.Console;
 import utils.ExecutionResponse;
 
+/**
+ * Выводит те элементы, чей VehicleType меньше заданного.
+ * @author trikesh
+ */
 public class FilterLessThanType extends Command{
     private Console console;
     private CollectionManager collectionManager;
@@ -15,6 +19,11 @@ public class FilterLessThanType extends Command{
         this.console = console;
         this.collectionManager = collectionManager;
     }
+
+    /**
+     * Выполняет команду
+     * @return Успешность выполнения команды.
+     */
     @Override
     public ExecutionResponse apply(String[] args) {
         if (args[1].isEmpty()) return new ExecutionResponse(false, "Команда используется не верно!");

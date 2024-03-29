@@ -4,6 +4,10 @@ import managers.CollectionManager;
 import utils.Console;
 import utils.ExecutionResponse;
 
+/**
+ * Убирает элемент по id.
+ * @author trikesh
+ */
 public class RemoveById extends Command{
     private Console console;
     private CollectionManager collectionManager;
@@ -13,6 +17,11 @@ public class RemoveById extends Command{
         this.console = console;
         this.collectionManager = collectionManager;
     }
+
+    /**
+     * Выполняет команду
+     * @return Успешность выполнения команды.
+     */
     @Override
     public ExecutionResponse apply(String[] args) {
         if (args[1].isEmpty()) return new ExecutionResponse(false, "Команда используется не верно!");
