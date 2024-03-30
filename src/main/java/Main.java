@@ -10,10 +10,13 @@ import utils.Runner;
 
 public class Main {
     public static void main(String[] args) {
-        String filename = "db.xml";
         Console console = new StandardConsole();
         console.selectConsoleScanner();
-        DumpManager dumpManager = new DumpManager(filename, console);
+        if (args.length != 1) {
+            console.println("Введите имя загружаемого файла как аргумент командной строки");
+            System.exit(1);
+        }
+        DumpManager dumpManager = new DumpManager(args[0], console);
         CollectionManager collectionManager = new CollectionManager(dumpManager);
         if (!collectionManager.init()){
             console.printError("Не удалось загрузить коллекцию");
